@@ -1,122 +1,101 @@
-# \# 💪 Gym Easy (FLUTTER)
+# 💪 Gym Easy (Flutter)
 
-# Este repositório contém o código-fonte do aplicativo Gym Easy, uma solução pensada para pessoas que desejam criar, organizar e acompanhar seus treinos de forma personalizada, utilizando fotos reais dos equipamentos que têm acesso na academia.
+Este repositório contém o código-fonte do aplicativo **Gym Easy**, uma solução pensada para pessoas que desejam **criar, organizar e acompanhar seus treinos de forma personalizada**, utilizando fotos reais dos equipamentos que têm acesso na academia.
 
-# 
+---
 
-# \## 🏋️‍♂️ Sobre o App
+## 🏋️‍♂️ Sobre o App
 
-# 
+Treinar não é só ir à academia — é um compromisso com a evolução pessoal. Mas muitos praticantes, principalmente iniciantes, enfrentam dificuldades para lembrar:
 
-# Treinar não é só ir à academia — é um compromisso com a evolução pessoal. Mas muitos praticantes, principalmente iniciantes, enfrentam dificuldades para lembrar:
+- Qual carga usaram no último treino
+- Quantas repetições ou séries faziam
+- Qual máquina funcionou melhor para determinado grupo muscular
 
-# 
+O **Gym Easy** nasce para resolver exatamente isso.
 
-# \- Qual carga usaram no último treino  
+O app permite que você:
 
-# \- Quantas repetições ou séries faziam  
+- Crie sua **própria biblioteca de exercícios**, com nome, grupo muscular, carga, observações e **foto real da máquina**
+- Monte seus treinos por **dia da semana** ou **grupo muscular**
+- Acompanhe a **evolução dos treinos** com facilidade
+- Esqueça os treinos genéricos e adote um app que se adapta à sua realidade
 
-# \- Qual máquina funcionou melhor para determinado grupo muscular  
+---
 
-# 
+## 👥 Colaboradores
 
-# O \*\*Gym Easy\*\* nasce para resolver exatamente isso.
+O desenvolvimento é colaborativo e conta com os seguintes responsáveis:
 
-# 
+- Gustavo Duarte
+- [adicione aqui o nome de outro colaborador, se houver]
 
-# O app permite que você:
+Este repositório serve para documentar o progresso e versionamento do projeto, garantindo organização, rastreabilidade e continuidade.
 
-# \- Crie sua \*\*própria biblioteca de exercícios\*\*, com nome, grupo muscular, carga, observações e \*\*foto real da máquina\*\*
+---
 
-# \- Monte seus treinos por \*\*dia da semana\*\* ou \*\*grupo muscular\*\*
+## 🚀 Começando
 
-# \- Acompanhe a \*\*evolução dos treinos\*\* com facilidade
+Para contribuir ou rodar o projeto localmente, siga os passos abaixo:
 
-# \- Esqueça os treinos genéricos e adote um app que se adapta à sua realidade
+### 1. Configure o ambiente Flutter
 
-# 
+Você precisa ter o Flutter instalado e configurado corretamente em sua máquina.
 
-# \## 👥 Colaboradores
+👉 [Guia Oficial de Instalação do Flutter](https://flutter.dev/docs/get-started/install)
 
-# 
+---
 
-# O desenvolvimento é colaborativo e conta com o seguinte responsável:
+### 2. Clone o repositório
 
-# \- Gustavo Duarte  
+```bash
+git clone https://github.com/SeuUsuario/GymEasy.git
+cd GymEasy
+```
 
-# 
+---
 
-# Este repositório serve para documentar o progresso e versionamento do projeto, garantindo organização, rastreabilidade e continuidade.
+### 3. Instale as dependências
 
-# 
+```bash
+flutter pub get
+```
 
-# \## 🚀 Começando                               
+---
 
-# Para começar a contribuir ou modificar o código do aplicativo, siga os passos abaixo:
+### 4. Execute o projeto
 
-# 
+Certifique-se de que um dispositivo físico ou emulador esteja disponível e execute:
 
-# \### 1. Configurar o ambiente Flutter                    
+```bash
+flutter run
+```
 
-# Antes de iniciar, é necessário ter o ambiente de desenvolvimento Flutter corretamente configurado em sua máquina. Caso ainda não tenha, siga as instruções detalhadas na documentação oficial do Flutter:
+---
 
-# 
+## 📱 Como usar
 
-# Flutter - \[Guia de Instalação](https://flutter.dev/docs/get-started/install)
+1. Crie sua conta ou entre como convidado
+2. Adicione seus exercícios com nome, descrição, grupo muscular e uma **foto da máquina**
+3. Monte seus treinos organizando os exercícios por dia ou grupo muscular
+4. Registre suas cargas, acompanhe a execução e veja sua evolução ao longo do tempo
 
-# 
+---
 
-# \### 2. Clonar o Repositório                    
+## 📦 Download do APK
 
-# Após configurar o ambiente Flutter, clone este repositório em sua máquina local utilizando o comando: 
+Caso você queira apenas usar o app sem modificar o código:
 
-# ```bash                       
+1. Acesse a seção **Releases** deste repositório
+2. Baixe o arquivo **APK mais recente**
+3. Instale no seu dispositivo Android
+4. Comece a usar e treinar com mais controle!
 
-# git https://github.com/GustaDuarte/gym-easy.git
+---
 
-# ```
+## ✉️ Contato
 
-# \### 3. Instale as dependências:
+Para sugestões, bugs ou contribuições, entre em contato com:
 
-# 
-
-# \### Como Usar                               
-
-# Para rodar o projeto em um dispositivo ou emulador:                       
-
-# 1\. Certifique-se de que um dispositivo físico ou emulador esteja conectado e funcionando corretamente.                             
-
-# 2\. Execute o comando:
-
-# ```bash  
-
-# flutter run
-
-# ```
-
-# 
-
-# \### Download do APK
-
-# 
-
-# Se você prefere apenas utilizar o aplicativo sem modificar o código, siga estas etapas:
-
-# 
-
-# 1\. Acesse a seção Releases deste repositório.                                                
-
-# 2\. Baixe a versão mais recente do APK disponibilizado.                           
-
-# 3\. Instale o APK no seu dispositivo Android.                             
-
-# 4\. Comece a usar e treinar com mais controle!
-
-# 
-
-# \## ✉️ Contato                        
-
-# \- 📧 duartegustavo.dev@gmail.com
-
-# \- https://www.linkedin.com/in/gustavo-duarte-225007219
-
+- 📧 gustavoduarte.dev@gmail.com
+- [seu LinkedIn ou GitHub opcional]
