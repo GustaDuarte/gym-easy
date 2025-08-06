@@ -50,7 +50,6 @@ Você precisa ter o Flutter instalado e configurado corretamente em sua máquina
 
 ```bash
 git clone https://github.com/SeuUsuario/GymEasy.git
-cd GymEasy
 ```
 
 ---
@@ -98,4 +97,4 @@ Caso você queira apenas usar o app sem modificar o código:
 Para sugestões, bugs ou contribuições, entre em contato com:
 
 - 📧 gustavoduarte.dev@gmail.com
-- [seu LinkedIn ou GitHub opcional]
+- https://www.linkedin.com/in/gustavo-duarte-225007219
