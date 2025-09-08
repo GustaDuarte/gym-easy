@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_projects/_core/my_colors.dart';
 import 'package:flutter_projects/models/exercise_model.dart';
 import 'package:flutter_projects/models/note_model.dart';
 
@@ -29,7 +30,7 @@ class ExerciseScreen extends StatelessWidget {
             Text(exerciseModel.exercise, style: const TextStyle(fontSize: 15)),
           ],
         ),
-        backgroundColor: const Color(0xFFF78E1E),
+        backgroundColor: MyColors.strongOranje,
         centerTitle: true,
         elevation: 0,
         toolbarHeight: 72,
@@ -38,7 +39,7 @@ class ExerciseScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Color(0xFFF78E1E),
+        backgroundColor: MyColors.strongOranje,
         onPressed: () {
           print("Adicionado com sucesso");
         },
@@ -48,7 +49,7 @@ class ExerciseScreen extends StatelessWidget {
         margin: EdgeInsets.all(8),
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
-          color: Colors.black,
+          color: MyColors.backgroundApp,
           borderRadius: BorderRadius.circular(16),
         ),
         child: ListView(
@@ -60,16 +61,16 @@ class ExerciseScreen extends StatelessWidget {
                 children: [
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFFF78E1E),
-                      foregroundColor: Colors.white,
+                      backgroundColor: MyColors.strongOranje,
+                      foregroundColor: MyColors.textCards,
                     ),
                     onPressed: () {},
                     child: Text("Enviar foto"),
                   ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFFF78E1E),
-                      foregroundColor: Colors.white,
+                      backgroundColor: MyColors.strongOranje,
+                      foregroundColor: MyColors.textCards,
                     ),
                     onPressed: () {},
                     child: const Text("Tirar foto"),
@@ -86,7 +87,7 @@ class ExerciseScreen extends StatelessWidget {
             Text(exerciseModel.execution),
             const Padding(
               padding: const EdgeInsets.all(8.0),
-              child: const Divider(color: Colors.white),
+              child: const Divider(color: MyColors.textCards),
             ),
             const Text(
               "Evolução",
