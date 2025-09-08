@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_projects/_core/my_colors.dart';
+import 'package:flutter_projects/components/decoration_authentification.dart';
 
 class AuthenticationScreen extends StatefulWidget {
   const AuthenticationScreen({super.key});
@@ -34,21 +35,21 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                   children: [
                     Image.asset("assets/logo.png", height: 200),
                     SizedBox(height: 32,),
-                    TextFormField(decoration: InputDecoration(label: Text("Email"),
+                    TextFormField(decoration: getAuthenticationInputDecoration("Email"),
                     ),
-                    ),
-                    TextFormField(decoration: InputDecoration(label: Text("Senha"),
-                    ),
+                    SizedBox(height: 8),
+                    TextFormField(decoration: getAuthenticationInputDecoration("Senha"),
                       obscureText: true,
                     ),
+                    SizedBox(height: 8),
                     Visibility(visible: !getIn, child: Column(
                       children: [
-                        TextFormField(decoration: InputDecoration(label: Text("Confirme Senha"),
-                        ),
+                        TextFormField(decoration: getAuthenticationInputDecoration("Confirme a senha"),
                           obscureText: true,
                         ),
-                        TextFormField(decoration: InputDecoration(label: Text("Nome"),
-                        ),),
+                        SizedBox(height: 8),
+                        TextFormField(decoration: getAuthenticationInputDecoration("Nome"),
+                        ),
                       ],
                     )),
                     SizedBox(height: 32,),
