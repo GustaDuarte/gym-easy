@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_projects/screens/authentication.dart';
+import 'package:flutter_projects/screens/authentication_screen.dart';
 import 'package:flutter_projects/screens/exercise.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_projects/screens/home_screen.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -22,7 +24,24 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: AuthenticationScreen(),
+      home: RouterSreen(),
     );
+  }
+}
+
+class RouterSreen extends StatelessWidget {
+  const RouterSreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.userChanges(),
+      builder: (context, snapshot){
+      if (snapshot.hasData){
+        return HomeScreen();
+      } else {
+        return AuthenticationScreen();
+      }
+    },);
   }
 }

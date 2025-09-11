@@ -145,14 +145,19 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
     if (_formKey.currentState!.validate()){
       if(getIn) {
         print("Entrada Validada");
+        _authentificationService.loginUser(email: email, password: password).then(
+          (String? error) {
+            if (error != null) {
+              showSnackBar(context: context, text: error);
+            }
+          },
+        );
       } else {
         print("Cadastro Validado");
         print("${_emailController.text}, ${_passwordController.text}, ${_nameController.text}");
         _authentificationService.userLogin(email: email, password: password, name: name).then((String? error) {
           if (error != null) {
             showSnackBar(context: context, text: error);
-          } else {
-            showSnackBar(context: context, text: "Cadastro efetuado com sucesso", isError: false);
           }
         });
       }
