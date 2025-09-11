@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "963870239540",
+    "project_id": "gym-easy-b26b5",
+    "storage_bucket": "gym-easy-b26b5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:963870239540:android:c5f73ca4b474a213e05361",
+        "android_client_info": {
+          "package_name": "com.example.flutter_projects"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDkwOrbe68alfFJsruNjf3Y8t1HSqp944"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

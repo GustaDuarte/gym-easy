@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_projects/_core/my_snackbar.dart';
 import 'package:flutter_projects/_core/my_colors.dart';
 import 'package:flutter_projects/components/decoration_authentification.dart';
+import 'package:flutter_projects/service/authentification_service.dart';
 
 class AuthenticationScreen extends StatefulWidget {
   const AuthenticationScreen({super.key});
@@ -12,6 +14,12 @@ class AuthenticationScreen extends StatefulWidget {
 class _AuthenticationScreenState extends State<AuthenticationScreen> {
   bool getIn = true;
   final _formKey = GlobalKey<FormState>();
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+
+  final AuthentificationService _authentificationService = AuthentificationService();
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +45,10 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                   children: [
                     Image.asset("assets/logo.png", height: 200),
                     SizedBox(height: 32,),
-                    TextFormField(decoration: getAuthenticationInputDecoration("Email"),
+                    TextFormField(
+                      controller: _emailController,
+                      decoration: getAuthenticationInputDecoration("Email"),
+                      style: const TextStyle(color: Colors.black),
                       validator: (String? value) {
                       if (value == null){
                         return "É necessario informar um email";
@@ -45,14 +56,17 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                       if (value.length < 5){
                         return "O email é muito curto";
                       }
-                      if (value.contains("@")){
+                      if (!value.contains("@")){
                         return "O email não é valido";
                       }
                       return null;
                       },
                     ),
                     SizedBox(height: 8),
-                    TextFormField(decoration: getAuthenticationInputDecoration("Senha"),
+                    TextFormField(
+                      controller: _passwordController,
+                      decoration: getAuthenticationInputDecoration("Senha"),
+                      style: const TextStyle(color: Colors.black),
                       obscureText: true,
                       validator: (String? value) {
                         if (value == null){
@@ -67,7 +81,9 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                     SizedBox(height: 8),
                     Visibility(visible: !getIn, child: Column(
                       children: [
-                        TextFormField(decoration: getAuthenticationInputDecoration("Confirme a senha"),
+                        TextFormField(
+                          decoration: getAuthenticationInputDecoration("Confirme a senha"),
+                          style: const TextStyle(color: Colors.black),
                           obscureText: true,
                           validator: (String? value) {
                             if (value == null){
@@ -80,7 +96,10 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                           },
                         ),
                         SizedBox(height: 8),
-                        TextFormField(decoration: getAuthenticationInputDecoration("Nome"),
+                        TextFormField(
+                          controller: _nameController,
+                          decoration: getAuthenticationInputDecoration("Nome"),
+                          style: const TextStyle(color: Colors.black),
                           validator: (String? value) {
                             if (value == null){
                               return "Campo nome não pode ser vazio";
@@ -119,9 +138,26 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
   }
 
   loginButton() {
+    String email = _emailController.text;
+    String password = _passwordController.text;
+    String name = _nameController.text;
+
     if (_formKey.currentState!.validate()){
-      print("Form valido");
-    }else {}
-    print("Form invalido");
+      if(getIn) {
+        print("Entrada Validada");
+      } else {
+        print("Cadastro Validado");
+        print("${_emailController.text}, ${_passwordController.text}, ${_nameController.text}");
+        _authentificationService.userLogin(email: email, password: password, name: name).then((String? error) {
+          if (error != null) {
+            showSnackBar(context: context, text: error);
+          } else {
+            showSnackBar(context: context, text: "Cadastro efetuado com sucesso", isError: false);
+          }
+        });
+      }
+    }else {
+      print("Form invalido");
+    }
   }
 }
