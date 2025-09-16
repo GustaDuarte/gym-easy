@@ -27,13 +27,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
       backgroundColor: Colors.black,
       body: Stack(
         children: [
-          Container(decoration: const BoxDecoration(gradient: LinearGradient(
-            begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-            MyColors.backgroundApp,
-            MyColors.backgroundCards,
-          ])),),
+          Container(color: MyColors.backgroundApp,),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Form(
@@ -44,6 +38,24 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Image.asset("assets/logo.png", height: 200),
+                    const Text(
+                      "Gym Easy",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: MyColors.textCards,
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const Text(
+                      "Academia e Musculação",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: MyColors.textCards,
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     SizedBox(height: 32,),
                     TextFormField(
                       controller: _emailController,
@@ -117,6 +129,10 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                       onPressed: () {
                         loginButton();
                       },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: MyColors.strongOranje,
+                        foregroundColor: MyColors.textCards
+                      ),
                       child: Text((getIn)? "Entrar" : "Cadastrar"),),
                     Divider(),
                     TextButton(
@@ -125,7 +141,10 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                             getIn = !getIn;
                           });
                         },
-                        child: Text((getIn) ? "Ainda não tem uma conta? Cadastre-se!" : "Já tem uma consta? Entre!"),
+                      style: TextButton.styleFrom(
+                        foregroundColor: MyColors.textCards,
+                      ),
+                        child: Text((getIn) ? "Ainda não tem uma conta? Cadastre-se!" : "Já tem uma conta? Entre!"),
                     ),
                   ],
                 ),
