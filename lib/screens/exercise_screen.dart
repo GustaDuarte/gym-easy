@@ -22,7 +22,7 @@ class ExerciseScreen extends StatelessWidget {
               exerciseModel.name,
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
             ),
-            Text(exerciseModel.exercise, style: const TextStyle(fontSize: 15)),
+            Text(exerciseModel.muscleGroup, style: const TextStyle(fontSize: 15)),
           ],
         ),
         backgroundColor: MyColors.strongOranje,
@@ -85,7 +85,7 @@ class ExerciseScreen extends StatelessWidget {
               child: const Divider(color: MyColors.textCards),
             ),
             const Text(
-              "Evolução",
+              "Observações",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
             const SizedBox(height: 8),

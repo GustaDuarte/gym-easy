@@ -80,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ExerciseModel exerciseModel = listExercise[index];
                   return ListTile(
                     title: Text(exerciseModel.name),
-                    subtitle: Text(exerciseModel.exercise),
+                    subtitle: Text(exerciseModel.muscleGroup),
                     trailing: IconButton(icon: Icon(Icons.edit), onPressed: (){
                       showModalHome(context, exercise: exerciseModel);
                     }, ),
