@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_projects/_core/home_modal.dart';
+import 'package:flutter_projects/_core/my_colors.dart';
 import 'package:flutter_projects/screens/exercise_screen.dart';
 import 'package:flutter_projects/service/authentification_service.dart';
 import 'package:flutter_projects/service/exercise_service.dart';
@@ -22,12 +23,20 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Meus exercícios",), centerTitle: true, actions: [IconButton(onPressed: (){
-        setState(() {
-          isDescending = !isDescending;
-        });
-      },
-          icon: Icon(Icons.sort_by_alpha_outlined))],),
+      appBar: AppBar(
+        title: Text("Meus exercícios"),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {
+              setState(() {
+                isDescending = !isDescending;
+              });
+            },
+            icon: Icon(Icons.sort_by_alpha_outlined),
+          ),
+        ],
+      ),
       drawer: Drawer(
         child: ListView(
           children: [
@@ -87,11 +96,37 @@ class _HomeScreenState extends State<HomeScreen> {
                   return ListTile(
                     title: Text(exerciseModel.name),
                     subtitle: Text(exerciseModel.muscleGroup),
-                    trailing: IconButton(
-                      icon: Icon(Icons.edit),
-                      onPressed: () {
-                        showModalHome(context, exercise: exerciseModel);
-                      },
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.edit),
+                          onPressed: () {
+                            showModalHome(context, exercise: exerciseModel);
+                          },
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            SnackBar snackBar = SnackBar(
+                              backgroundColor: Colors.red,
+                              content: Text(
+                                "Deseja remover ${exerciseModel.name}?",
+                              ),
+                              action: SnackBarAction(
+                                label: "REMOVER",
+                                textColor: MyColors.textCards,
+                                onPressed: () {
+                                  service.deleteExercise(
+                                    idExercise: exerciseModel.id,
+                                  );
+                                },
+                              ),
+                            );
+                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          },
+                          icon: Icon(Icons.delete),
+                        ),
+                      ],
                     ),
                     onTap: () {
                       Navigator.push(

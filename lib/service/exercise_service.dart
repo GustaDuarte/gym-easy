@@ -45,4 +45,8 @@ class ExerciseService {
         .orderBy("muscleGroup", descending: isDescending)
         .snapshots();
   }
+
+  Future<void> deleteExercise({required String idExercise}){
+    return _firestore.collection(userId).doc(idExercise).delete();
+  }
 }
