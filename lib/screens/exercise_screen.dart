@@ -4,14 +4,9 @@ import 'package:flutter_projects/models/exercise_model.dart';
 import 'package:flutter_projects/models/note_model.dart';
 
 class ExerciseScreen extends StatelessWidget {
-  ExerciseScreen({super.key});
+  final ExerciseModel exerciseModel;
+  ExerciseScreen({super.key, required this.exerciseModel});
 
-  final ExerciseModel exerciseModel = ExerciseModel(
-    id: "Ex001",
-    name: "Treino A",
-    exercise: "Backs",
-    execution: "Remada baixa",
-  );
   final List<NoteModel> listNotes = [
     NoteModel(id: "NM001", note: "Pouca ativação hoje", date: "2025-09-03"),
     NoteModel(id: "NM002", note: "Melhora na postura", date: "2025-09-10"),

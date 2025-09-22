@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_projects/screens/authentication_screen.dart';
-import 'package:flutter_projects/screens/exercise.dart';
+import 'package:flutter_projects/screens/exercise_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_projects/screens/home_screen.dart';
 import 'firebase_options.dart';
@@ -38,7 +38,7 @@ class RouterSreen extends StatelessWidget {
       stream: FirebaseAuth.instance.userChanges(),
       builder: (context, snapshot){
       if (snapshot.hasData){
-        return HomeScreen();
+        return HomeScreen(user: snapshot.data!,);
       } else {
         return AuthenticationScreen();
       }
