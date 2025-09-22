@@ -5,6 +5,7 @@ import 'package:flutter_projects/models/exercise_model.dart';
 import 'package:flutter_projects/models/note_model.dart';
 import 'package:flutter_projects/service/exercise_service.dart';
 import 'package:uuid/uuid.dart';
+import '../models/load_model.dart';
 
 showModalHome(BuildContext context, {ExerciseModel? exercise}) {
   showModalBottomSheet(
@@ -32,8 +33,9 @@ class ExerciseModal extends StatefulWidget {
 
 class _ExerciseModalState extends State<ExerciseModal> {
   final TextEditingController _nameCtrl = TextEditingController();
-  final TextEditingController _trainingCtrl = TextEditingController();
-  final TextEditingController _obsCtrl = TextEditingController();
+  final TextEditingController _muscleGroupCtrl = TextEditingController();
+  final TextEditingController _executionCtrl = TextEditingController();
+  final TextEditingController _loadCtrl = TextEditingController();
   final TextEditingController _noteCtrl = TextEditingController();
 
   bool isLoading = false;
@@ -44,8 +46,8 @@ class _ExerciseModalState extends State<ExerciseModal> {
   void initState() {
     if (widget.exerciseModel != null) {
       _nameCtrl.text = widget.exerciseModel!.name;
-      _trainingCtrl.text = widget.exerciseModel!.exercise;
-      _obsCtrl.text = widget.exerciseModel!.execution;
+      _muscleGroupCtrl.text = widget.exerciseModel!.muscleGroup;
+      _executionCtrl.text = widget.exerciseModel!.execution;
     }
     super.initState();
   }
@@ -105,9 +107,32 @@ class _ExerciseModalState extends State<ExerciseModal> {
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
-                      controller: _trainingCtrl,
+                      controller: _executionCtrl,
                       decoration: getAuthenticationInputDecoration(
-                        "Qual o grupo muscular?",
+                        "Descreva a execução:",
+                        icon: Icon(
+                          Icons.notes_rounded,
+                          color: MyColors.textCards,
+                        ),
+                      ),
+                      maxLines: null,
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _loadCtrl,
+                      decoration: getAuthenticationInputDecoration(
+                        "Carga:",
+                        icon: Icon(
+                          Icons.hdr_strong,
+                          color: MyColors.textCards,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _muscleGroupCtrl,
+                      decoration: getAuthenticationInputDecoration(
+                        "Grupo muscular:",
                         icon: Icon(
                           Icons.list_alt_rounded,
                           color: MyColors.textCards,
@@ -118,18 +143,6 @@ class _ExerciseModalState extends State<ExerciseModal> {
                       "Use o mesmo nome para exercícios que pertencem ao mesmo treino",
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 12),
-                    ),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      controller: _obsCtrl,
-                      decoration: getAuthenticationInputDecoration(
-                        "Alguma observação sobre o exercício?",
-                        icon: Icon(
-                          Icons.notes_rounded,
-                          color: MyColors.textCards,
-                        ),
-                      ),
-                      maxLines: null,
                     ),
                     Visibility(
                       visible: (widget.exerciseModel == null),
@@ -184,46 +197,55 @@ class _ExerciseModalState extends State<ExerciseModal> {
     );
   }
 
-  sendClick() {
+  sendClick() async {
     setState(() {
       isLoading = true;
     });
 
     String name = _nameCtrl.text;
-    String training = _trainingCtrl.text;
-    String obs = _obsCtrl.text;
+    String training = _muscleGroupCtrl.text;
+    String execution = _executionCtrl.text;
+    String load = _loadCtrl.text;
     String note = _noteCtrl.text;
 
     ExerciseModel exercise = ExerciseModel(
-      id: Uuid().v1(),
+      id: widget.exerciseModel?.id ?? Uuid().v1(),
       name: name,
-      exercise: training,
-      execution: obs,
+      muscleGroup: training,
+      load: load,
+      execution: execution,
     );
 
-    if (widget.exerciseModel != null) {
-      exercise.id = widget.exerciseModel!.id;
-    }
+    try {
+      await _exerciseService.addExercise(exercise);
 
-
-    _exerciseService.addExercise(exercise).then((value) {
-      if (note != "") {
+      if (note.isNotEmpty) {
         NoteModel notes = NoteModel(
-          id: const Uuid().v1(),
+          id: Uuid().v1(),
           note: note,
           date: DateTime.now().toString(),
         );
-        _exerciseService
-            .addNote(exercise.id, notes)
-            .then((value) {
-          setState(() {
-            isLoading = false;
-          });
-          Navigator.pop(context);
-        });
-      } else {
-        Navigator.pop(context);
+        await _exerciseService.addNote(exercise.id, notes);
       }
-    });
+
+      if (load.isNotEmpty) {
+        LoadModel loads = LoadModel(
+          id: Uuid().v1(),
+          load: load,
+          date: DateTime.now().toString(),
+        );
+        await _exerciseService.addLoad(exercise.id, loads);
+      }
+
+      setState(() {
+        isLoading = false;
+      });
+      Navigator.pop(context);
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      print("Erro ao salvar exercício: $e");
+    }
   }
 }
