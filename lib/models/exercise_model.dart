@@ -17,7 +17,7 @@ class ExerciseModel {
   ExerciseModel.fromMap(Map<String, dynamic> map)
     : id = map["id"] ?? '',
       name = map["name"] ?? '',
-      muscleGroup = map["exercise"] ?? '',
+      muscleGroup = map["muscleGroup"] ?? '',
       execution = map["execution"] ?? '',
       load = map["load"] ?? '',
       urlImage = map["urlImage"] ?? '';
@@ -26,7 +26,7 @@ class ExerciseModel {
     return {
       "id": id,
       "name": name,
-      "exercise": muscleGroup,
+      "muscleGroup": muscleGroup,
       "execution": execution,
       "load": load,
       "urlImage": urlImage,

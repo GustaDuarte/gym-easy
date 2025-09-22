@@ -38,6 +38,6 @@ class ExerciseService {
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> connectStreamExercise() {
-    return _firestore.collection(userId).snapshots();
+    return _firestore.collection(userId).orderBy("muscleGroup").snapshots();
   }
 }
