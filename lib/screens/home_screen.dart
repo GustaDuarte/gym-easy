@@ -17,11 +17,17 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final ExerciseService service = ExerciseService();
+  bool isDescending = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Meus exercícios")),
+      appBar: AppBar(title: Text("Meus exercícios",), centerTitle: true, actions: [IconButton(onPressed: (){
+        setState(() {
+          isDescending = !isDescending;
+        });
+      },
+          icon: Icon(Icons.sort_by_alpha_outlined))],),
       drawer: Drawer(
         child: ListView(
           children: [
@@ -61,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ),
       body: StreamBuilder(
-        stream: service.connectStreamExercise(),
+        stream: service.connectStreamExercise(isDescending),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -81,9 +87,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   return ListTile(
                     title: Text(exerciseModel.name),
                     subtitle: Text(exerciseModel.muscleGroup),
-                    trailing: IconButton(icon: Icon(Icons.edit), onPressed: (){
-                      showModalHome(context, exercise: exerciseModel);
-                    }, ),
+                    trailing: IconButton(
+                      icon: Icon(Icons.edit),
+                      onPressed: () {
+                        showModalHome(context, exercise: exerciseModel);
+                      },
+                    ),
                     onTap: () {
                       Navigator.push(
                         context,

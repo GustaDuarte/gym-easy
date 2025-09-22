@@ -37,7 +37,12 @@ class ExerciseService {
         .set(loadModel.toMap());
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> connectStreamExercise() {
-    return _firestore.collection(userId).orderBy("muscleGroup").snapshots();
+  Stream<QuerySnapshot<Map<String, dynamic>>> connectStreamExercise(
+    bool isDescending,
+  ) {
+    return _firestore
+        .collection(userId)
+        .orderBy("muscleGroup", descending: isDescending)
+        .snapshots();
   }
 }
