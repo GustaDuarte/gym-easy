@@ -5,6 +5,7 @@ import 'package:flutter_projects/_core/my_colors.dart';
 import 'package:flutter_projects/screens/exercise_screen.dart';
 import 'package:flutter_projects/service/authentification_service.dart';
 import 'package:flutter_projects/service/exercise_service.dart';
+import '../components/initial_list.dart';
 import '../models/exercise_model.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -23,8 +24,14 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: MyColors.backgroundApp,
       appBar: AppBar(
-        title: Text("Meus exercícios"),
+        iconTheme: const IconThemeData(color: Colors.white),
+        backgroundColor: MyColors.backgroundApp,
+        title: const Text(
+          "Meus exercícios",
+          style: TextStyle(color: MyColors.textCards),
+        ),
         centerTitle: true,
         actions: [
           IconButton(
@@ -33,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 isDescending = !isDescending;
               });
             },
-            icon: Icon(Icons.sort_by_alpha_outlined),
+            icon: Icon(Icons.sort_by_alpha_outlined, color: MyColors.textCards),
           ),
         ],
       ),
@@ -70,84 +77,51 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: MyColors.strongOranje,
+        foregroundColor: MyColors.textCards,
         child: Icon(Icons.add),
         onPressed: () {
           showModalHome(context);
         },
       ),
-      body: StreamBuilder(
-        stream: service.connectStreamExercise(isDescending),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else {
-            if (snapshot.hasData &&
-                snapshot.data != null &&
-                snapshot.data!.docs.isNotEmpty) {
-              List<ExerciseModel> listExercise = [];
-
-              for (var doc in snapshot.data!.docs) {
-                listExercise.add(ExerciseModel.fromMap(doc.data()));
-              }
-
-              return ListView(
-                children: List.generate(listExercise.length, (index) {
-                  ExerciseModel exerciseModel = listExercise[index];
-                  return ListTile(
-                    title: Text(exerciseModel.name),
-                    subtitle: Text(exerciseModel.muscleGroup),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: Icon(Icons.edit),
-                          onPressed: () {
-                            showModalHome(context, exercise: exerciseModel);
-                          },
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            SnackBar snackBar = SnackBar(
-                              backgroundColor: Colors.red,
-                              content: Text(
-                                "Deseja remover ${exerciseModel.name}?",
-                              ),
-                              action: SnackBarAction(
-                                label: "REMOVER",
-                                textColor: MyColors.textCards,
-                                onPressed: () {
-                                  service.deleteExercise(
-                                    idExercise: exerciseModel.id,
-                                  );
-                                },
-                              ),
-                            );
-                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                          },
-                          icon: Icon(Icons.delete),
-                        ),
-                      ],
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder:
-                              (context) =>
-                                  ExerciseScreen(exerciseModel: exerciseModel),
-                        ),
-                      );
-                    },
-                  );
-                }),
-              );
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        child: StreamBuilder(
+          stream: service.connectStreamExercise(isDescending),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
             } else {
-              return const Center(
-                child: Text("Nenhum exercício adicionado. \nVamos adicionar?"),
-              );
+              if (snapshot.hasData &&
+                  snapshot.data != null &&
+                  snapshot.data!.docs.isNotEmpty) {
+                List<ExerciseModel> listExercise = [];
+
+                for (var doc in snapshot.data!.docs) {
+                  listExercise.add(ExerciseModel.fromMap(doc.data()));
+                }
+
+                return ListView(
+                  children: List.generate(listExercise.length, (index) {
+                    ExerciseModel exerciseModel = listExercise[index];
+                    return initialWidgetList(
+                      exerciseModel: exerciseModel,
+                      service: service,
+                    );
+                  }),
+                );
+              } else {
+                return const Center(
+                  child: Text(
+                    "Nenhum exercício adicionado. \nVamos adicionar?",
+                    style: TextStyle(color: MyColors.textCards),
+                    textAlign: TextAlign.center,
+                  ),
+                );
+              }
             }
-          }
-        },
+          },
+        ),
       ),
     );
   }

@@ -38,7 +38,7 @@ class ExerciseScreen extends StatelessWidget {
         onPressed: () {
           print("Adicionado com sucesso");
         },
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.add, color: MyColors.textCards,),
       ),
       body: Container(
         margin: EdgeInsets.all(8),
