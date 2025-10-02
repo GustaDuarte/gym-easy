@@ -100,6 +100,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
                   children: [
                     const SizedBox(height: 16),
                     TextFormField(
+                      style: TextStyle(color: Colors.black),
                       controller: _nameCtrl,
                       decoration: getAuthenticationInputDecoration(
                         "Qual o nome do exercício?",
@@ -108,6 +109,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
+                      style: TextStyle(color: Colors.black),
                       controller: _executionCtrl,
                       decoration: getAuthenticationInputDecoration(
                         "Descreva a execução:",
@@ -120,6 +122,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
+                      style: TextStyle(color: Colors.black),
                       controller: _loadCtrl,
                       decoration: getAuthenticationInputDecoration(
                         "Carga:",
@@ -131,6 +134,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
+                      style: TextStyle(color: Colors.black),
                       controller: _muscleGroupCtrl,
                       decoration: getAuthenticationInputDecoration(
                         "Grupo muscular:",
@@ -151,6 +155,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
                         children: [
                           const SizedBox(height: 16),
                           TextFormField(
+                            style: TextStyle(color: Colors.black),
                             controller: _noteCtrl,
                             decoration: getAuthenticationInputDecoration(
                               "Alguma anotação?",
