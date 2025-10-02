@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_projects/models/exercise_model.dart';
-import 'package:flutter_projects/models/note_model.dart';
-
 import '../models/load_model.dart';
 
 class ExerciseService {
@@ -17,15 +15,6 @@ class ExerciseService {
         .collection(userId)
         .doc(exerciseModel.id)
         .set(exerciseModel.toMap());
-  }
-
-  Future<void> addNote(String idExercise, NoteModel noteModel) async {
-    return await _firestore
-        .collection(userId)
-        .doc(idExercise)
-        .collection("notes")
-        .doc(noteModel.id)
-        .set(noteModel.toMap());
   }
 
   Future<void> addLoad(String idExercise, LoadModel loadModel) async {

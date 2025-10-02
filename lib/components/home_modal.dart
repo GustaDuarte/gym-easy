@@ -4,6 +4,7 @@ import 'package:flutter_projects/components/decoration_authentification.dart';
 import 'package:flutter_projects/models/exercise_model.dart';
 import 'package:flutter_projects/models/note_model.dart';
 import 'package:flutter_projects/service/exercise_service.dart';
+import 'package:flutter_projects/service/note_service.dart';
 import 'package:uuid/uuid.dart';
 import '../models/load_model.dart';
 
@@ -225,7 +226,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
           note: note,
           date: DateTime.now().toString(),
         );
-        await _exerciseService.addNote(exercise.id, notes);
+        NoteService().addNote(idExercise: exercise.id, noteModel: notes);
       }
 
       if (load.isNotEmpty) {

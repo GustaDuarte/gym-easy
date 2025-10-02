@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_projects/_core/home_modal.dart';
+import 'package:flutter_projects/components/home_modal.dart';
 import 'package:flutter_projects/_core/my_colors.dart';
 import 'package:flutter_projects/screens/exercise_screen.dart';
 import 'package:flutter_projects/service/authentification_service.dart';
