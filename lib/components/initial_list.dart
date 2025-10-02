@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_projects/models/exercise_model.dart';
 import 'package:flutter_projects/service/exercise_service.dart';
 
-import '../_core/home_modal.dart';
+import 'home_modal.dart';
 import '../_core/my_colors.dart';
 import '../screens/exercise_screen.dart';
 
