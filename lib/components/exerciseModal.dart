@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_projects/_core/my_colors.dart';
 import 'package:flutter_projects/models/note_model.dart';
 import 'package:uuid/uuid.dart';
 import '../service/note_service.dart';
@@ -12,16 +13,29 @@ Future<dynamic> showExerciseModal(
     context: context,
     builder: (context) {
       TextEditingController noteController = TextEditingController();
-
       if (noteModel != null) {
         noteController.text = noteModel.note;
       }
 
       return AlertDialog(
-        title: Text("Alguma observação?"),
+        backgroundColor: MyColors.backgroundApp,
+        title: Text(
+          "Alguma observação?",
+          style: TextStyle(color: MyColors.textCards),
+        ),
         content: TextFormField(
           controller: noteController,
-          decoration: InputDecoration(label: Text("Observação:")),
+          cursorColor: MyColors.strongOranje,
+          decoration: InputDecoration(
+            label: Text(
+              "Observação:",
+              style: TextStyle(color: MyColors.textCards),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: MyColors.strongOranje, width: 2),
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
           maxLines: null,
         ),
         actions: [
@@ -29,9 +43,18 @@ Future<dynamic> showExerciseModal(
             onPressed: () {
               Navigator.pop(context);
             },
-            child: const Text("Cancelar"),
+            child: const Text(
+              "Cancelar",
+              style: TextStyle(color: MyColors.textCards),
+            ),
           ),
           ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: MyColors.strongOranje,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
             onPressed: () {
               NoteModel note = NoteModel(
                 id: Uuid().v1(),
@@ -47,6 +70,7 @@ Future<dynamic> showExerciseModal(
             },
             child: Text(
               (noteModel != null) ? "Editar observação" : "Criar Observação",
+              style: TextStyle(color: MyColors.textCards),
             ),
           ),
         ],

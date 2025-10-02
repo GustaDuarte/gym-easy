@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_projects/components/home_modal.dart';
 import 'package:flutter_projects/_core/my_colors.dart';
-import 'package:flutter_projects/screens/exercise_screen.dart';
 import 'package:flutter_projects/service/authentification_service.dart';
 import 'package:flutter_projects/service/exercise_service.dart';
 import '../components/initial_list.dart';
@@ -45,29 +44,41 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       drawer: Drawer(
+        backgroundColor: MyColors.backgroundApp,
         child: ListView(
           children: [
             UserAccountsDrawerHeader(
               currentAccountPicture: CircleAvatar(
                 backgroundImage: AssetImage("assets/logo.png"),
               ),
+              decoration: BoxDecoration(color: MyColors.backgroundCards),
               accountName: Text(
                 (widget.user.displayName != null)
                     ? widget.user.displayName!
                     : "",
+                style: const TextStyle(color: Colors.white),
               ),
-              accountEmail: Text(widget.user.email!),
+              accountEmail: Text(
+                widget.user.email!,
+                style: const TextStyle(color: Colors.white),
+              ),
             ),
             ListTile(
-              title: Text("Quer saber como esse app foi feito?"),
-              leading: Icon(Icons.menu_book_rounded),
+              title: Text(
+                "Quer saber como esse app foi feito?",
+                style: TextStyle(color: MyColors.textCards),
+              ),
+              leading: Icon(Icons.menu_book_rounded, color: MyColors.textCards),
               dense: true,
               onTap: () {},
             ),
             const Divider(),
             ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text("Deslogar"),
+              leading: const Icon(Icons.logout, color: Colors.red,),
+              title: const Text(
+                "Deslogar",
+                style: TextStyle(color: MyColors.textCards),
+              ),
               dense: true,
               onTap: () {
                 AuthentificationService().logout();
