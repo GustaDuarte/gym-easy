@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_projects/_core/my_colors.dart';
 import 'package:flutter_projects/screens/authentication_screen.dart';
 import 'package:flutter_projects/screens/exercise_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -21,8 +22,20 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData.dark().copyWith(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      theme: ThemeData(
+        brightness: Brightness.dark,
+        primaryColor: MyColors.strongOranje,
+        colorScheme: ColorScheme.dark(
+          primary: MyColors.strongOranje,
+          secondary: MyColors.strongOranje,
+          onPrimary: MyColors.textCards,
+          onSecondary: MyColors.textCards,
+        ),
+        textSelectionTheme: TextSelectionThemeData(
+          cursorColor: MyColors.strongOranje,
+          selectionColor: MyColors.strongOranje.withOpacity(0.4),
+          selectionHandleColor: MyColors.strongOranje,
+        ),
       ),
       home: RouterSreen(),
     );
