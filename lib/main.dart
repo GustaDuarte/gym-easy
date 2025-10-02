@@ -22,15 +22,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        primaryColor: MyColors.strongOranje,
-        colorScheme: ColorScheme.dark(
-          primary: MyColors.strongOranje,
-          secondary: MyColors.strongOranje,
-          onPrimary: MyColors.textCards,
-          onSecondary: MyColors.textCards,
-        ),
+      theme: ThemeData.dark().copyWith(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         textSelectionTheme: TextSelectionThemeData(
           cursorColor: MyColors.strongOranje,
           selectionColor: MyColors.strongOranje.withOpacity(0.4),
