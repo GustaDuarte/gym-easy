@@ -4,6 +4,9 @@ import 'package:flutter_projects/components/home_modal.dart';
 import 'package:flutter_projects/_core/my_colors.dart';
 import 'package:flutter_projects/service/authentification_service.dart';
 import 'package:flutter_projects/service/exercise_service.dart';
+import '../components/drawer_components/about_dialog.dart';
+import '../components/drawer_components/faq_dialog.dart';
+import '../components/drawer_components/feedbackDialog.dart';
 import '../components/initial_list.dart';
 import '../models/exercise_model.dart';
 
@@ -46,6 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
       drawer: Drawer(
         backgroundColor: MyColors.backgroundApp,
         child: ListView(
+          padding: EdgeInsets.zero,
           children: [
             UserAccountsDrawerHeader(
               currentAccountPicture: CircleAvatar(
@@ -53,9 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               decoration: BoxDecoration(color: MyColors.backgroundCards),
               accountName: Text(
-                (widget.user.displayName != null)
-                    ? widget.user.displayName!
-                    : "",
+                widget.user.displayName ?? "",
                 style: const TextStyle(color: Colors.white),
               ),
               accountEmail: Text(
@@ -63,23 +65,121 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: const TextStyle(color: Colors.white),
               ),
             ),
-            ListTile(
-              title: Text(
-                "Quer saber como esse app foi feito?",
-                style: TextStyle(color: MyColors.textCards),
+            // ----------------- SEÇÃO 1: GERAL --------------------
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Text(
+                "Geral",
+                style: TextStyle(
+                  color: Colors.white54,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              leading: Icon(Icons.menu_book_rounded, color: MyColors.textCards),
-              dense: true,
-              onTap: () {},
+            ),
+            ListTile(
+              leading: Icon(Icons.person, color: MyColors.textCards),
+              title: Text("Meu Perfil", style: TextStyle(color: MyColors.textCards)),
+              onTap: () {
+                Navigator.pop(context);
+                showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    title: Text("Meu Perfil"),
+                    content: Text("Tela de perfil em desenvolvimento."),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.history, color: MyColors.textCards),
+              title:
+              Text("Histórico", style: TextStyle(color: MyColors.textCards)),
+              onTap: () {
+                Navigator.pop(context);
+                showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    title: Text("Histórico"),
+                    content: Text("Tela de histórico em desenvolvimento."),
+                  ),
+                );
+              },
+            ),
+            // ----------------- SEÇÃO 2: CONFIGURAÇÕES --------------------
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Text(
+                "Configurações",
+                style: TextStyle(
+                  color: Colors.white54,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.settings, color: MyColors.textCards),
+              title: Text("Configurações",
+                  style: TextStyle(color: MyColors.textCards)),
+              onTap: () {
+                Navigator.pop(context);
+                showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    title: Text("Configurações"),
+                    content: Text("Opções de configuração em desenvolvimento."),
+                  ),
+                );
+              },
+            ),
+            // ----------------- SEÇÃO 3: SUPORTE --------------------
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Text(
+                "Ajuda",
+                style: TextStyle(
+                  color: Colors.white54,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.help_outline, color: MyColors.textCards),
+              title: Text("FAQ / Ajuda", style: TextStyle(color: MyColors.textCards)),
+              onTap: () {
+                Navigator.pop(context);
+                FAQDialog.show(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.info_outline, color: MyColors.textCards),
+              title: Text("Sobre o App", style: TextStyle(color: MyColors.textCards)),
+              onTap: () {
+                Navigator.pop(context);
+                AboutAppDialog.show(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.feedback_outlined, color: MyColors.textCards),
+              title: Text("Enviar Feedback",
+                  style: TextStyle(color: MyColors.textCards)),
+              onTap: () {
+                Navigator.pop(context);
+                showDialog(
+                  context: context,
+                  builder: (_) => FeedbackDialog(),
+                );
+              },
             ),
             const Divider(),
             ListTile(
-              leading: const Icon(Icons.logout, color: Colors.red,),
+              leading: const Icon(Icons.logout, color: Colors.red),
               title: const Text(
                 "Deslogar",
-                style: TextStyle(color: MyColors.textCards),
+                style: TextStyle(color: Colors.red),
               ),
-              dense: true,
               onTap: () {
                 AuthentificationService().logout();
               },
