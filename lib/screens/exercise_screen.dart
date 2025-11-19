@@ -1,20 +1,31 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_projects/_core/my_colors.dart';
 import 'package:flutter_projects/models/exercise_model.dart';
+import 'package:flutter_projects/service/exercise_service.dart';
 import 'package:flutter_projects/service/note_service.dart';
+import 'package:image_picker/image_picker.dart';
 import '../components/exerciseModal.dart';
 import '../components/load_modal.dart';
 import '../components/showLoadHistory.dart';
 import '../models/note_model.dart';
 import '../service/load_service.dart';
 
-class ExerciseScreen extends StatelessWidget {
+class ExerciseScreen extends StatefulWidget {
   final ExerciseModel exerciseModel;
 
-  ExerciseScreen({super.key, required this.exerciseModel});
+  const ExerciseScreen({super.key, required this.exerciseModel});
 
-  NoteService _noteService = NoteService();
+  @override
+  State<ExerciseScreen> createState() => _ExerciseScreenState();
+}
+
+class _ExerciseScreenState extends State<ExerciseScreen> {
+  final NoteService _noteService = NoteService();
+  bool isUploadingImage = false;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +34,7 @@ class ExerciseScreen extends StatelessWidget {
         title: Column(
           children: [
             Text(
-              exerciseModel.name,
+              widget.exerciseModel.name,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 22,
@@ -31,7 +42,7 @@ class ExerciseScreen extends StatelessWidget {
               ),
             ),
             Text(
-              exerciseModel.muscleGroup,
+              widget.exerciseModel.muscleGroup,
               style: const TextStyle(fontSize: 15, color: MyColors.textCards),
             ),
           ],
@@ -48,7 +59,7 @@ class ExerciseScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: MyColors.strongOranje,
         onPressed: () {
-          showExerciseModal(context, idExercise: exerciseModel.id);
+          showExerciseModal(context, idExercise: widget.exerciseModel.id);
         },
         child: const Icon(Icons.add, color: MyColors.textCards),
       ),
@@ -64,27 +75,119 @@ class ExerciseScreen extends StatelessWidget {
           children: [
             SizedBox(
               height: 250,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: MyColors.strongOranje,
-                      foregroundColor: MyColors.textCards,
-                    ),
-                    onPressed: () {},
-                    child: Text("Enviar foto"),
-                  ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: MyColors.strongOranje,
-                      foregroundColor: MyColors.textCards,
-                    ),
-                    onPressed: () {},
-                    child: const Text("Tirar foto"),
-                  ),
-                ],
-              ),
+              child:
+                  (isUploadingImage)
+                      ? Center(child: CircularProgressIndicator())
+                      : (widget.exerciseModel.urlImage == null ||
+                          widget.exerciseModel.urlImage!.isEmpty)
+                      ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: MyColors.strongOranje,
+                              foregroundColor: MyColors.textCards,
+                            ),
+                            onPressed: () {
+                              _uploadImage(context, isCamera: false);
+                            },
+                            child: const Text("Enviar foto"),
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: MyColors.strongOranje,
+                              foregroundColor: MyColors.textCards,
+                            ),
+                            onPressed: () {
+                              _uploadImage(context, isCamera: true);
+                            },
+                            child: const Text("Tirar foto"),
+                          ),
+                        ],
+                      )
+                      : Stack(
+                        children: [
+                          Align(
+                            alignment: Alignment.center,
+                            child: FutureBuilder(
+                              future:
+                                  FirebaseStorage.instance
+                                      .ref(widget.exerciseModel.urlImage)
+                                      .getDownloadURL(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState !=
+                                    ConnectionState.done) {
+                                  return Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+
+                                return ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: Image.network(
+                                    snapshot.data!,
+                                    alignment: Alignment.center,
+                                    fit: BoxFit.cover,
+                                    loadingBuilder: (
+                                      context,
+                                      child,
+                                      loadingProgress,
+                                    ) {
+                                      if (loadingProgress == null) {
+                                        return child;
+                                      }
+                                      if (loadingProgress.expectedTotalBytes !=
+                                          null) {
+                                        return Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              alignment: Alignment.center,
+                                              child: LinearProgressIndicator(
+                                                value:
+                                                    loadingProgress
+                                                        .cumulativeBytesLoaded /
+                                                    loadingProgress
+                                                        .expectedTotalBytes!,
+                                              ),
+                                            ),
+                                            SizedBox(height: 8),
+                                            Container(
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                "${((loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!) * 100).toStringAsFixed(2)}%",
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      }
+                                      return Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: IconButton(
+                              onPressed: () async{
+                                await ExerciseService().removeImage(
+                                  widget.exerciseModel,
+                                );
+                                setState(() {
+                                  widget.exerciseModel.urlImage = null;
+                                });
+                              },
+                              icon: Icon(Icons.delete, color: Colors.red),
+                            ),
+                          ),
+                        ],
+                      ),
             ),
             const SizedBox(height: 8),
             const Text(
@@ -100,7 +203,7 @@ class ExerciseScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
-                exerciseModel.execution,
+                widget.exerciseModel.execution,
                 style: const TextStyle(fontSize: 16, color: MyColors.textCards),
               ),
             ),
@@ -111,7 +214,9 @@ class ExerciseScreen extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             StreamBuilder(
-              stream: LoadService().connectStream(idExercise: exerciseModel.id),
+              stream: LoadService().connectStream(
+                idExercise: widget.exerciseModel.id,
+              ),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return const Center(child: CircularProgressIndicator());
@@ -156,7 +261,7 @@ class ExerciseScreen extends StatelessWidget {
                                   onPressed: () {
                                     showLoadModal(
                                       context,
-                                      idExercise: exerciseModel.id,
+                                      idExercise: widget.exerciseModel.id,
                                     );
                                   },
                                 ),
@@ -169,7 +274,7 @@ class ExerciseScreen extends StatelessWidget {
                                   onPressed: () {
                                     showLoadHistory(
                                       context,
-                                      idExercise: exerciseModel.id,
+                                      idExercise: widget.exerciseModel.id,
                                     );
                                   },
                                 ),
@@ -198,7 +303,7 @@ class ExerciseScreen extends StatelessWidget {
               ),
               child: StreamBuilder(
                 stream: _noteService.connectStream(
-                  idExercise: exerciseModel.id,
+                  idExercise: widget.exerciseModel.id,
                 ),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -251,7 +356,7 @@ class ExerciseScreen extends StatelessWidget {
                                       onPressed: () {
                                         showExerciseModal(
                                           context,
-                                          idExercise: exerciseModel.id,
+                                          idExercise: widget.exerciseModel.id,
                                           noteModel: noteNow,
                                         );
                                       },
@@ -267,7 +372,7 @@ class ExerciseScreen extends StatelessWidget {
                                       ),
                                       onPressed: () {
                                         _noteService.deleteNote(
-                                          exerciseId: exerciseModel.id,
+                                          exerciseId: widget.exerciseModel.id,
                                           noteId: noteNow.id,
                                         );
                                       },
@@ -291,6 +396,50 @@ class ExerciseScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _uploadImage(BuildContext context, {required bool isCamera}) async {
+    setState(() {
+      isUploadingImage = true;
+    });
+
+    ImagePicker imagePicker = ImagePicker();
+
+    XFile? image = await imagePicker.pickImage(
+      source: (isCamera) ? ImageSource.camera : ImageSource.gallery,
+      maxHeight: 2000,
+      maxWidth: 2000,
+    );
+
+    if (image != null) {
+      File file = File(image.path);
+
+      await FirebaseStorage.instance
+          .ref(widget.exerciseModel.id + image.name)
+          .putFile(file);
+      String url = widget.exerciseModel.id + image.name;
+      //await result.ref.getDownloadURL();
+
+      setState(() {
+        widget.exerciseModel.urlImage = url;
+        ExerciseService().addExercise(widget.exerciseModel);
+      });
+    } else {
+      showNoSnackBarImage();
+    }
+
+    setState(() {
+      isUploadingImage = false;
+    });
+  }
+
+  showNoSnackBarImage() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.red,
+        content: Text("Nenhuma imagem foi selecionada."),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_projects/models/exercise_model.dart';
 import '../models/load_model.dart';
 
@@ -35,7 +36,18 @@ class ExerciseService {
         .snapshots();
   }
 
-  Future<void> deleteExercise({required String idExercise}){
-    return _firestore.collection(userId).doc(idExercise).delete();
+  Future<void> deleteExercise({required ExerciseModel exerciseModel}) async {
+    await removeImage(exerciseModel);
+    return _firestore.collection(userId).doc(exerciseModel.id).delete();
+  }
+
+  Future<void> removeImage(ExerciseModel exerciseModel) async {
+    if (exerciseModel.urlImage != null && exerciseModel.urlImage!.isNotEmpty) {
+      await FirebaseStorage.instance
+          .ref(exerciseModel.urlImage!)
+          .delete();
+    }
+    exerciseModel.urlImage = null;
+    await addExercise(exerciseModel);
   }
 }
