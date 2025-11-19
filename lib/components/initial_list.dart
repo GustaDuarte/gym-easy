@@ -113,7 +113,7 @@ class initialWidgetList extends StatelessWidget {
                                   textColor: MyColors.textCards,
                                   onPressed: () {
                                     service.deleteExercise(
-                                      idExercise: exerciseModel.id,
+                                      exerciseModel: exerciseModel,
                                     );
                                   },
                                 ),
