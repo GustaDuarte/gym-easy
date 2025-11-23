@@ -9,7 +9,7 @@ import '../screens/exercise_screen.dart';
 class initialWidgetList extends StatelessWidget {
   final ExerciseModel exerciseModel;
   final ExerciseService service;
-  final String cardSize; // small / medium / large
+  final String cardSize;
 
   const initialWidgetList({
     super.key,
@@ -87,7 +87,6 @@ class initialWidgetList extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Column(
                 children: [
-                  // LINHA SUPERIOR — Nome + Ícones (flexível)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -143,8 +142,7 @@ class initialWidgetList extends StatelessWidget {
                       ),
                     ],
                   ),
-
-                  // LINHA INFERIOR — Execução (flexível)
+                  
                   Row(
                     children: [
                       Expanded(

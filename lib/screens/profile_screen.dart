@@ -425,7 +425,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
 
     if (!mounted) return;
-
     setState(() {
       _isSaving = false;
     });

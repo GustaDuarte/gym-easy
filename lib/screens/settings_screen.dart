@@ -14,8 +14,8 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   bool _showDetails = true;
-  String _cardSize = 'medium'; // small | medium | large
-  String _weightUnit = 'kg';   // kg | lbs
+  String _cardSize = 'medium';
+  String _weightUnit = 'kg';
 
   @override
   void initState() {
@@ -77,7 +77,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       body: ListView(
         children: [
-          // --- CONTA ---
           _sectionTitle("Conta"),
           ListTile(
             leading: const Icon(Icons.person, color: MyColors.textCards),
@@ -96,7 +95,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
             },
           ),
 
-          // --- LISTA DE EXERCÍCIOS ---
           _sectionTitle("Lista de exercícios"),
           SwitchListTile(
             activeColor: MyColors.strongOranje,
@@ -159,7 +157,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
             },
           ),
 
-          // --- TREINOS ---
           _sectionTitle("Treinos"),
           Padding(
             padding: const EdgeInsets.only(left: 16.0, top: 8),
@@ -197,7 +194,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
             },
           ),
 
-          // --- UTILITÁRIO ---
           _sectionTitle("Utilitário"),
           ListTile(
             leading: const Icon(Icons.feedback, color: MyColors.textCards),
@@ -213,7 +209,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
             },
           ),
 
-          // --- SOBRE ---
           _sectionTitle("Sobre"),
           const ListTile(
             title: Text(
