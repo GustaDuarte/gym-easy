@@ -10,6 +10,7 @@ import '../components/drawer_components/faq_dialog.dart';
 import '../components/drawer_components/feedbackDialog.dart';
 import '../components/initial_list.dart';
 import '../models/exercise_model.dart';
+import 'history_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final User user;
@@ -119,17 +120,14 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               onTap: () {
                 Navigator.pop(context);
-                showDialog(
-                  context: context,
-                  builder:
-                      (_) => AlertDialog(
-                        title: Text("Histórico"),
-                        content: Text("Tela de histórico em desenvolvimento."),
-                      ),
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => HistoryScreen(),
+                  ),
                 );
               },
             ),
-            // ----------------- SEÇÃO 2: CONFIGURAÇÕES --------------------
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Text(
@@ -161,7 +159,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
             ),
-            // ----------------- SEÇÃO 3: SUPORTE --------------------
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Text(
