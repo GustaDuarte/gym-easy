@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_projects/components/home_modal.dart';
 import 'package:flutter_projects/_core/my_colors.dart';
+import 'package:flutter_projects/screens/profile_screen.dart';
 import 'package:flutter_projects/service/authentification_service.dart';
 import 'package:flutter_projects/service/exercise_service.dart';
 import '../components/drawer_components/about_dialog.dart';
@@ -22,6 +23,14 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final ExerciseService service = ExerciseService();
   bool isDescending = false;
+
+  late User _currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentUser = widget.user;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,22 +62,25 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             UserAccountsDrawerHeader(
               currentAccountPicture: CircleAvatar(
-                backgroundImage: AssetImage("assets/logo.png"),
+                backgroundImage:
+                    (_currentUser.photoURL != null &&
+                            _currentUser.photoURL!.isNotEmpty)
+                        ? NetworkImage(_currentUser.photoURL!)
+                        : const AssetImage("assets/logo.png") as ImageProvider,
               ),
               decoration: BoxDecoration(color: MyColors.backgroundCards),
               accountName: Text(
-                widget.user.displayName ?? "",
+                _currentUser.displayName ?? "",
                 style: const TextStyle(color: Colors.white),
               ),
               accountEmail: Text(
-                widget.user.email!,
+                _currentUser.email ?? "",
                 style: const TextStyle(color: Colors.white),
               ),
             ),
-            // ----------------- SEÇÃO 1: GERAL --------------------
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Text(
+              child: const Text(
                 "Geral",
                 style: TextStyle(
                   color: Colors.white54,
@@ -79,30 +91,41 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             ListTile(
               leading: Icon(Icons.person, color: MyColors.textCards),
-              title: Text("Meu Perfil", style: TextStyle(color: MyColors.textCards)),
-              onTap: () {
+              title: Text(
+                "Meu Perfil",
+                style: TextStyle(color: MyColors.textCards),
+              ),
+              onTap: () async {
                 Navigator.pop(context);
-                showDialog(
-                  context: context,
-                  builder: (_) => AlertDialog(
-                    title: Text("Meu Perfil"),
-                    content: Text("Tela de perfil em desenvolvimento."),
+                final updatedUser = await Navigator.push<User?>(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => ProfileScreen(user: _currentUser),
                   ),
                 );
+
+                if (updatedUser != null && mounted) {
+                  setState(() {
+                    _currentUser = updatedUser;
+                  });
+                }
               },
             ),
             ListTile(
               leading: Icon(Icons.history, color: MyColors.textCards),
-              title:
-              Text("Histórico", style: TextStyle(color: MyColors.textCards)),
+              title: Text(
+                "Histórico",
+                style: TextStyle(color: MyColors.textCards),
+              ),
               onTap: () {
                 Navigator.pop(context);
                 showDialog(
                   context: context,
-                  builder: (_) => AlertDialog(
-                    title: Text("Histórico"),
-                    content: Text("Tela de histórico em desenvolvimento."),
-                  ),
+                  builder:
+                      (_) => AlertDialog(
+                        title: Text("Histórico"),
+                        content: Text("Tela de histórico em desenvolvimento."),
+                      ),
                 );
               },
             ),
@@ -120,16 +143,21 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             ListTile(
               leading: Icon(Icons.settings, color: MyColors.textCards),
-              title: Text("Configurações",
-                  style: TextStyle(color: MyColors.textCards)),
+              title: Text(
+                "Configurações",
+                style: TextStyle(color: MyColors.textCards),
+              ),
               onTap: () {
                 Navigator.pop(context);
                 showDialog(
                   context: context,
-                  builder: (_) => AlertDialog(
-                    title: Text("Configurações"),
-                    content: Text("Opções de configuração em desenvolvimento."),
-                  ),
+                  builder:
+                      (_) => AlertDialog(
+                        title: Text("Configurações"),
+                        content: Text(
+                          "Opções de configuração em desenvolvimento.",
+                        ),
+                      ),
                 );
               },
             ),
@@ -147,7 +175,10 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             ListTile(
               leading: Icon(Icons.help_outline, color: MyColors.textCards),
-              title: Text("FAQ / Ajuda", style: TextStyle(color: MyColors.textCards)),
+              title: Text(
+                "FAQ / Ajuda",
+                style: TextStyle(color: MyColors.textCards),
+              ),
               onTap: () {
                 Navigator.pop(context);
                 FAQDialog.show(context);
@@ -155,7 +186,10 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             ListTile(
               leading: Icon(Icons.info_outline, color: MyColors.textCards),
-              title: Text("Sobre o App", style: TextStyle(color: MyColors.textCards)),
+              title: Text(
+                "Sobre o App",
+                style: TextStyle(color: MyColors.textCards),
+              ),
               onTap: () {
                 Navigator.pop(context);
                 AboutAppDialog.show(context);
@@ -163,14 +197,13 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             ListTile(
               leading: Icon(Icons.feedback_outlined, color: MyColors.textCards),
-              title: Text("Enviar Feedback",
-                  style: TextStyle(color: MyColors.textCards)),
+              title: Text(
+                "Enviar Feedback",
+                style: TextStyle(color: MyColors.textCards),
+              ),
               onTap: () {
                 Navigator.pop(context);
-                showDialog(
-                  context: context,
-                  builder: (_) => FeedbackDialog(),
-                );
+                showDialog(context: context, builder: (_) => FeedbackDialog());
               },
             ),
             const Divider(),
