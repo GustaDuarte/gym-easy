@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_projects/components/home_modal.dart';
 import 'package:flutter_projects/_core/my_colors.dart';
 import 'package:flutter_projects/screens/profile_screen.dart';
+import 'package:flutter_projects/screens/settings_screen.dart';
 import 'package:flutter_projects/service/authentification_service.dart';
 import 'package:flutter_projects/service/exercise_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../components/drawer_components/about_dialog.dart';
 import '../components/drawer_components/faq_dialog.dart';
 import '../components/drawer_components/feedbackDialog.dart';
@@ -15,7 +17,7 @@ import 'history_screen.dart';
 class HomeScreen extends StatefulWidget {
   final User user;
 
-  HomeScreen({super.key, required this.user});
+  const HomeScreen({super.key, required this.user});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -24,6 +26,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final ExerciseService service = ExerciseService();
   bool isDescending = false;
+  String _cardSize = 'medium';
 
   late User _currentUser;
 
@@ -31,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _currentUser = widget.user;
+    _loadCardSize();
   }
 
   @override
@@ -145,18 +149,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 "Configurações",
                 style: TextStyle(color: MyColors.textCards),
               ),
-              onTap: () {
+              onTap: () async {
                 Navigator.pop(context);
-                showDialog(
-                  context: context,
-                  builder:
-                      (_) => AlertDialog(
-                        title: Text("Configurações"),
-                        content: Text(
-                          "Opções de configuração em desenvolvimento.",
-                        ),
-                      ),
+
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const SettingsScreen(),
+                  ),
                 );
+
+                if (!mounted) return;
+                _loadCardSize();
               },
             ),
             Padding(
@@ -248,6 +252,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     return initialWidgetList(
                       exerciseModel: exerciseModel,
                       service: service,
+                      cardSize: _cardSize,
                     );
                   }),
                 );
@@ -265,5 +270,12 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _loadCardSize() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _cardSize = prefs.getString('cardSize') ?? 'medium';
+    });
   }
 }

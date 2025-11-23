@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../_core/my_colors.dart';
 import '../service/load_service.dart';
 
@@ -14,34 +15,57 @@ Future<void> showLoadHistory(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
     builder: (_) {
-      return StreamBuilder(
-        stream: LoadService().connectStream(idExercise: idExercise),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
+      return FutureBuilder(
+        future: SharedPreferences.getInstance(),
+        builder: (context, snapshotPrefs) {
+          if (!snapshotPrefs.hasData) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          final docs = snapshot.data!.docs;
+          final prefs = snapshotPrefs.data as SharedPreferences;
+          final String unitLabel = prefs.getString('weightUnit') ?? 'kg';
 
-          if (docs.isEmpty) {
-            return const Center(child: Text("Nenhum histórico encontrado"));
-          }
+          return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+            stream: LoadService().connectStream(idExercise: idExercise),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-          return ListView.builder(
-            padding: const EdgeInsets.all(16),
-            itemCount: docs.length,
-            itemBuilder: (context, index) {
-              final data = docs[index].data();
-              return ListTile(
-                leading: const Icon(Icons.fitness_center, color: Colors.white),
-                title: Text(
-                  "${data['load']} kg",
-                  style: const TextStyle(color: Colors.white),
-                ),
-                subtitle: Text(
-                  data['date'],
-                  style: const TextStyle(color: Colors.white70, fontSize: 12),
-                ),
+              final docs = snapshot.data!.docs;
+
+              if (docs.isEmpty) {
+                return const Center(
+                  child: Text(
+                    "Nenhum histórico encontrado",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                );
+              }
+
+              return ListView.builder(
+                padding: const EdgeInsets.all(16),
+                itemCount: docs.length,
+                itemBuilder: (context, index) {
+                  final data = docs[index].data();
+                  final String load = data['load'] ?? "-";
+                  final String date = data['date'] ?? "";
+
+                  return ListTile(
+                    leading: const Icon(Icons.fitness_center, color: Colors.white),
+                    title: Text(
+                      "$load $unitLabel",
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                    subtitle: Text(
+                      date,
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 12,
+                      ),
+                    ),
+                  );
+                },
               );
             },
           );
