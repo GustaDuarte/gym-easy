@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -84,8 +83,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             padding: const EdgeInsets.only(bottom: 24),
             children: [
               const SizedBox(height: 8),
-
-              // FOTO DE PERFIL (CLICÁVEL)
               Center(
                 child: GestureDetector(
                   onTap: _isUploadingPhoto ? null : _changePhoto,
@@ -149,7 +146,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               const SizedBox(height: 12),
 
-              // NOME (título branco + campo embaixo)
               Container(
                 width: double.infinity,
                 padding:
@@ -194,10 +190,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ],
                 ),
               ),
-
               const SizedBox(height: 12),
-
-              // E-MAIL (SOMENTE LEITURA, mensagem fora da "label")
               Container(
                 width: double.infinity,
                 padding:
@@ -236,7 +229,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ],
                 ),
               ),
-
               const SizedBox(height: 24),
               const Text(
                 "Alterar senha (opcional)",
@@ -255,8 +247,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
               const SizedBox(height: 12),
-
-              // NOVA SENHA
               Container(
                 width: double.infinity,
                 padding:
@@ -285,8 +275,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
 
               const SizedBox(height: 8),
-
-              // CONFIRMAR SENHA
               Container(
                 width: double.infinity,
                 padding:
@@ -318,7 +306,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   },
                 ),
               ),
-
               const SizedBox(height: 32),
               SizedBox(
                 height: 48,
