@@ -14,11 +14,16 @@ showModalHome(BuildContext context, {ExerciseModel? exercise}) {
     backgroundColor: MyColors.backgroundCards,
     isDismissible: false,
     isScrollControlled: true,
-    shape: RoundedRectangleBorder(
+    shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
     ),
     builder: (context) {
-      return ExerciseModal(exerciseModel: exercise);
+      return Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: ExerciseModal(exerciseModel: exercise),
+      );
     },
   );
 }
@@ -33,6 +38,7 @@ class ExerciseModal extends StatefulWidget {
 }
 
 class _ExerciseModalState extends State<ExerciseModal> {
+  final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameCtrl = TextEditingController();
   final TextEditingController _muscleGroupCtrl = TextEditingController();
   final TextEditingController _executionCtrl = TextEditingController();
@@ -40,182 +46,204 @@ class _ExerciseModalState extends State<ExerciseModal> {
   final TextEditingController _noteCtrl = TextEditingController();
 
   bool isLoading = false;
-
   final ExerciseService _exerciseService = ExerciseService();
 
   @override
   void initState() {
+    super.initState();
     if (widget.exerciseModel != null) {
       _nameCtrl.text = widget.exerciseModel!.name;
       _muscleGroupCtrl.text = widget.exerciseModel!.muscleGroup;
       _executionCtrl.text = widget.exerciseModel!.execution;
+      _loadCtrl.text = widget.exerciseModel!.load ?? "";
     }
-    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _nameCtrl.dispose();
+    _muscleGroupCtrl.dispose();
+    _executionCtrl.dispose();
+    _loadCtrl.dispose();
+    _noteCtrl.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(32),
-      height: MediaQuery
-          .of(context)
-          .size
-          .height * 0.9,
-      child: Form(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      child: Text(
-                        (widget.exerciseModel != null)
-                            ? "Editar ${widget.exerciseModel!.name}"
-                            : "Adicionar Exercício",
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: MyColors.mediumOranje,
-                        ),
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child: Text(
+                      (widget.exerciseModel != null)
+                          ? "Editar ${widget.exerciseModel!.name}"
+                          : "Adicionar Exercício",
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: MyColors.mediumOranje,
                       ),
                     ),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: Icon(Icons.close, color: MyColors.textCards),
-                    ),
-                  ],
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(Icons.close, color: MyColors.textCards),
+                  ),
+                ],
+              ),
+              const Divider(),
+              const SizedBox(height: 16),
+              TextFormField(
+                style: const TextStyle(color: Colors.black),
+                controller: _nameCtrl,
+                decoration: getAuthenticationInputDecoration(
+                  "Qual o nome do exercício?",
+                  icon: Icon(Icons.abc, color: MyColors.textCards),
                 ),
-                Divider(),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return "Digite o nome do exercício";
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                style: const TextStyle(color: Colors.black),
+                controller: _executionCtrl,
+                decoration: getAuthenticationInputDecoration(
+                  "Descreva a execução:",
+                  icon: Icon(
+                    Icons.notes_rounded,
+                    color: MyColors.textCards,
+                  ),
+                ),
+                maxLines: null,
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return "Descreva a execução do exercício";
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                style: const TextStyle(color: Colors.black),
+                controller: _loadCtrl,
+                decoration: getAuthenticationInputDecoration(
+                  "Carga:",
+                  icon: Icon(Icons.hdr_strong, color: MyColors.textCards),
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                style: const TextStyle(color: Colors.black),
+                controller: _muscleGroupCtrl,
+                decoration: getAuthenticationInputDecoration(
+                  "Grupo muscular:",
+                  icon: Icon(
+                    Icons.list_alt_rounded,
+                    color: MyColors.textCards,
+                  ),
+                ),
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return "Informe o grupo muscular";
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 4),
+              const Text(
+                "Use o mesmo nome para exercícios que pertencem ao mesmo treino",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 12),
+              ),
+              Visibility(
+                visible: (widget.exerciseModel == null),
+                child: Column(
                   children: [
                     const SizedBox(height: 16),
                     TextFormField(
-                      style: TextStyle(color: Colors.black),
-                      controller: _nameCtrl,
+                      style: const TextStyle(color: Colors.black),
+                      controller: _noteCtrl,
                       decoration: getAuthenticationInputDecoration(
-                        "Qual o nome do exercício?",
-                        icon: Icon(Icons.abc, color: MyColors.textCards),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      style: TextStyle(color: Colors.black),
-                      controller: _executionCtrl,
-                      decoration: getAuthenticationInputDecoration(
-                        "Descreva a execução:",
+                        "Alguma anotação?",
                         icon: Icon(
-                          Icons.notes_rounded,
+                          Icons.emoji_emotions_rounded,
                           color: MyColors.textCards,
                         ),
                       ),
                       maxLines: null,
                     ),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      style: TextStyle(color: Colors.black),
-                      controller: _loadCtrl,
-                      decoration: getAuthenticationInputDecoration(
-                        "Carga:",
-                        icon: Icon(
-                          Icons.hdr_strong,
-                          color: MyColors.textCards,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      style: TextStyle(color: Colors.black),
-                      controller: _muscleGroupCtrl,
-                      decoration: getAuthenticationInputDecoration(
-                        "Grupo muscular:",
-                        icon: Icon(
-                          Icons.list_alt_rounded,
-                          color: MyColors.textCards,
-                        ),
-                      ),
-                    ),
-                    Text(
-                      "Use o mesmo nome para exercícios que pertencem ao mesmo treino",
+                    const SizedBox(height: 4),
+                    const Text(
+                      "Você não precisa preencher isso agora.",
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 12),
                     ),
-                    Visibility(
-                      visible: (widget.exerciseModel == null),
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 16),
-                          TextFormField(
-                            style: TextStyle(color: Colors.black),
-                            controller: _noteCtrl,
-                            decoration: getAuthenticationInputDecoration(
-                              "Alguma anotação?",
-                              icon: Icon(
-                                Icons.emoji_emotions_rounded,
-                                color: MyColors.textCards,
-                              ),
-                            ),
-                            maxLines: null,
-                          ),
-                          Text(
-                            "Você não precisa preencher isso agora.",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 12),
-                          ),
-                        ],
-                      ),
-                    ),
                   ],
                 ),
-              ],
-            ),
-            ElevatedButton(
-              onPressed: () {
-                sendClick();
-              },
-              child:
-              (isLoading)
-                  ? const SizedBox(
-                height: 16,
-                width: 16,
-                child: CircularProgressIndicator(
-                  color: MyColors.strongOranje,
-                ),
-              )
-                  : Text(
-                (widget.exerciseModel != null)
-                    ? "Editar exercício"
-                    : "Criar exercício",
               ),
-            ),
-          ],
+              const SizedBox(height: 24),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: MyColors.strongOranje,
+                  foregroundColor: Colors.white,
+                ),
+                onPressed: isLoading
+                    ? null
+                    : () async {
+                  if (!_formKey.currentState!.validate()) return;
+                  await sendClick();
+                },
+                child: (isLoading)
+                    ? const SizedBox(
+                  height: 16,
+                  width: 16,
+                  child: CircularProgressIndicator(
+                    color: MyColors.strongOranje,
+                  ),
+                )
+                    : Text(
+                  (widget.exerciseModel != null)
+                      ? "Editar exercício"
+                      : "Criar exercício",
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  sendClick() async {
+  Future<void> sendClick() async {
     setState(() {
       isLoading = true;
     });
 
-    String name = _nameCtrl.text;
-    String training = _muscleGroupCtrl.text;
-    String execution = _executionCtrl.text;
-    String load = _loadCtrl.text;
-    String note = _noteCtrl.text;
+    final String name = _nameCtrl.text.trim();
+    final String training = _muscleGroupCtrl.text.trim();
+    final String execution = _executionCtrl.text.trim();
+    final String load = _loadCtrl.text.trim();
+    final String note = _noteCtrl.text.trim();
 
-    ExerciseModel exercise = ExerciseModel(
-      id: widget.exerciseModel?.id ?? Uuid().v1(),
+    final ExerciseModel exercise = ExerciseModel(
+      id: widget.exerciseModel?.id ?? const Uuid().v1(),
       name: name,
       muscleGroup: training,
       load: load,
@@ -224,34 +252,43 @@ class _ExerciseModalState extends State<ExerciseModal> {
 
     try {
       await _exerciseService.addExercise(exercise);
-
       if (note.isNotEmpty) {
-        NoteModel notes = NoteModel(
-          id: Uuid().v1(),
+        final NoteModel notes = NoteModel(
+          id: const Uuid().v1(),
           note: note,
           date: DateTime.now().toString(),
         );
         NoteService().addNote(idExercise: exercise.id, noteModel: notes);
       }
-
       if (load.isNotEmpty) {
-        LoadModel loads = LoadModel(
-          id: Uuid().v1(),
+        final LoadModel loads = LoadModel(
+          id: const Uuid().v1(),
           load: load,
           date: DateTime.now().toString(),
         );
         await _exerciseService.addLoad(exercise.id, loads);
       }
-
+      if (!mounted) return;
       setState(() {
         isLoading = false;
       });
       Navigator.pop(context);
     } catch (e) {
+      if (!mounted) return;
       setState(() {
         isLoading = false;
       });
-      print("Erro ao salvar exercício: $e");
+      debugPrint("Erro ao salvar exercício: $e");
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text(
+            "Ocorreu um erro ao salvar o exercício. Tente novamente.",
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      );
     }
   }
 }

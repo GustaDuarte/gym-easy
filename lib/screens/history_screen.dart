@@ -90,7 +90,6 @@ class HistoryScreen extends StatelessWidget {
                   const EdgeInsets.symmetric(vertical: 8, horizontal: 32),
                   child: Stack(
                     children: [
-
                       Align(
                         alignment: Alignment.bottomRight,
                         child: Container(
@@ -146,7 +145,6 @@ class HistoryScreen extends StatelessWidget {
                               ],
                             ),
                             const SizedBox(height: 4),
-
                             Row(
                               children: [
                                 Expanded(
@@ -157,8 +155,7 @@ class HistoryScreen extends StatelessWidget {
                                     builder: (context, loadSnapshot) {
                                       if (!loadSnapshot.hasData ||
                                           loadSnapshot.data == null ||
-                                          loadSnapshot
-                                              .data!.docs.isEmpty) {
+                                          loadSnapshot.data!.docs.isEmpty) {
                                         return const Text(
                                           "Nenhuma carga registrada",
                                           overflow: TextOverflow.ellipsis,
@@ -175,12 +172,31 @@ class HistoryScreen extends StatelessWidget {
                                       docsLoad[0].data();
                                       final String load =
                                           lastLoadData['load'] ?? "-";
-                                      final String? date =
+                                      final String? rawDate =
                                       lastLoadData['date'];
 
-                                      final text = (date != null &&
-                                          date.isNotEmpty)
-                                          ? "Última carga: $load • $date"
+                                      String? formattedDate;
+                                      if (rawDate != null &&
+                                          rawDate.isNotEmpty) {
+                                        try {
+                                          final dt = DateTime.parse(rawDate);
+
+                                          String two(int n) => n
+                                              .toString()
+                                              .padLeft(2, '0');
+
+                                          formattedDate =
+                                          "${two(dt.day)}/${two(dt.month)}/${dt.year} "
+                                              "${two(dt.hour)}:${two(dt.minute)}";
+                                        } catch (_) {
+                                          formattedDate = rawDate;
+                                        }
+                                      }
+
+                                      final text =
+                                      (formattedDate != null &&
+                                          formattedDate.isNotEmpty)
+                                          ? "Última carga: $load • $formattedDate"
                                           : "Última carga: $load";
 
                                       return Text(

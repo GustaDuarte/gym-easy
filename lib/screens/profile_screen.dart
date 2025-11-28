@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 
 class ProfileScreen extends StatefulWidget {
   final User user;
+
   const ProfileScreen({super.key, required this.user});
 
   @override
@@ -22,7 +23,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late TextEditingController _emailController;
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
-  TextEditingController();
+      TextEditingController();
 
   bool _isSaving = false;
   bool _isUploadingPhoto = false;
@@ -33,8 +34,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    _nameController =
-        TextEditingController(text: widget.user.displayName ?? "");
+    _nameController = TextEditingController(
+      text: widget.user.displayName ?? "",
+    );
     _emailController = TextEditingController(text: widget.user.email ?? "");
     _photoUrl = widget.user.photoURL;
   }
@@ -90,13 +92,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     alignment: Alignment.center,
                     children: [
                       CircleAvatar(
-                        radius: 55,
-                        backgroundColor: MyColors.backgroundCards,
-                        backgroundImage: (_photoUrl != null &&
-                            _photoUrl!.isNotEmpty)
-                            ? NetworkImage(_photoUrl!)
-                            : const AssetImage("assets/logo.png")
-                        as ImageProvider,
+                        radius: 45,
+                        backgroundColor:
+                            (_photoUrl == null || _photoUrl!.isEmpty)
+                                ? MyColors.strongOranje
+                                : Colors.transparent,
+                        child:
+                            (_photoUrl != null && _photoUrl!.isNotEmpty)
+                                ? CircleAvatar(
+                                  radius: 45,
+                                  backgroundImage: NetworkImage(_photoUrl!),
+                                  backgroundColor: Colors.transparent,
+                                )
+                                : const Icon(
+                                  Icons.person,
+                                  color: MyColors.textCards,
+                                  size: 48,
+                                ),
                       ),
                       if (_isUploadingPhoto)
                         Positioned.fill(
@@ -148,8 +160,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
               Container(
                 width: double.infinity,
-                padding:
-                const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 12,
+                ),
                 decoration: BoxDecoration(
                   color: MyColors.backgroundCards,
                   borderRadius: BorderRadius.circular(12),
@@ -167,10 +181,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     TextFormField(
                       controller: _nameController,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
+                      style: const TextStyle(color: Colors.white, fontSize: 16),
                       cursorColor: MyColors.strongOranje,
                       decoration: const InputDecoration(
                         hintText: "Digite seu nome",
@@ -193,8 +204,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               const SizedBox(height: 12),
               Container(
                 width: double.infinity,
-                padding:
-                const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 12,
+                ),
                 decoration: BoxDecoration(
                   color: MyColors.backgroundCards,
                   borderRadius: BorderRadius.circular(12),
@@ -213,18 +226,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     const SizedBox(height: 4),
                     Text(
                       _emailController.text,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
+                      style: const TextStyle(color: Colors.white, fontSize: 16),
                     ),
                     const SizedBox(height: 4),
                     const Text(
                       "O e-mail não pode ser alterado.",
-                      style: TextStyle(
-                        color: Colors.white54,
-                        fontSize: 11,
-                      ),
+                      style: TextStyle(color: Colors.white54, fontSize: 11),
                     ),
                   ],
                 ),
@@ -241,16 +248,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
               const SizedBox(height: 8),
               const Text(
                 "Se não quiser trocar a senha, deixe os campos abaixo em branco.",
-                style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 13,
-                ),
+                style: TextStyle(color: Colors.white70, fontSize: 13),
               ),
               const SizedBox(height: 12),
               Container(
                 width: double.infinity,
-                padding:
-                const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
                   color: MyColors.backgroundCards,
                   borderRadius: BorderRadius.circular(12),
@@ -277,8 +283,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               const SizedBox(height: 8),
               Container(
                 width: double.infinity,
-                padding:
-                const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
                   color: MyColors.backgroundCards,
                   borderRadius: BorderRadius.circular(12),
@@ -318,18 +326,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: _isSaving
-                      ? const CircularProgressIndicator(
-                    valueColor:
-                    AlwaysStoppedAnimation<Color>(Colors.white),
-                  )
-                      : const Text(
-                    "Salvar alterações",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
+                  child:
+                      _isSaving
+                          ? const CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Colors.white,
+                            ),
+                          )
+                          : const Text(
+                            "Salvar alterações",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
                 ),
               ),
             ],
@@ -393,10 +403,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _isUploadingPhoto = false;
       });
 
-      showSnackBar(
-        context: context,
-        text: "Foto de perfil alterada!",
-      );
+      showSnackBar(context: context, text: "Foto de perfil alterada!");
     } catch (e) {
       if (!mounted) return;
       setState(() {
@@ -432,10 +439,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (error != null) {
       showSnackBar(context: context, text: error);
     } else {
-      showSnackBar(
-        context: context,
-        text: "Dados atualizados com sucesso!",
-      );
+      showSnackBar(context: context, text: "Dados atualizados com sucesso!");
 
       await Future.delayed(const Duration(milliseconds: 500));
       if (!mounted) return;

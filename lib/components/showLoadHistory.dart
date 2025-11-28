@@ -21,7 +21,6 @@ Future<void> showLoadHistory(
           if (!snapshotPrefs.hasData) {
             return const Center(child: CircularProgressIndicator());
           }
-
           final prefs = snapshotPrefs.data as SharedPreferences;
           final String unitLabel = prefs.getString('weightUnit') ?? 'kg';
 
@@ -42,23 +41,35 @@ Future<void> showLoadHistory(
                   ),
                 );
               }
-
               return ListView.builder(
                 padding: const EdgeInsets.all(16),
                 itemCount: docs.length,
                 itemBuilder: (context, index) {
                   final data = docs[index].data();
                   final String load = data['load'] ?? "-";
-                  final String date = data['date'] ?? "";
+                  final String rawDate = data['date'] ?? "";
 
+                  String formattedDate = rawDate;
+                  if (rawDate.isNotEmpty) {
+                    try {
+                      final dt = DateTime.parse(rawDate);
+                      String two(int n) => n.toString().padLeft(2, '0');
+                      formattedDate =
+                      "${two(dt.day)}/${two(dt.month)}/${dt.year} "
+                          "${two(dt.hour)}:${two(dt.minute)}";
+                    } catch (_) {
+                      formattedDate = rawDate;
+                    }
+                  }
                   return ListTile(
-                    leading: const Icon(Icons.fitness_center, color: Colors.white),
+                    leading:
+                    const Icon(Icons.fitness_center, color: Colors.white),
                     title: Text(
                       "$load $unitLabel",
                       style: const TextStyle(color: Colors.white),
                     ),
                     subtitle: Text(
-                      date,
+                      formattedDate,
                       style: const TextStyle(
                         color: Colors.white70,
                         fontSize: 12,
