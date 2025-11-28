@@ -66,13 +66,23 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: EdgeInsets.zero,
           children: [
             UserAccountsDrawerHeader(
-              currentAccountPicture: CircleAvatar(
-                backgroundImage:
-                    (_currentUser.photoURL != null &&
-                            _currentUser.photoURL!.isNotEmpty)
-                        ? NetworkImage(_currentUser.photoURL!)
-                        : const AssetImage("assets/logo.png") as ImageProvider,
-              ),
+              currentAccountPicture:
+                  (_currentUser.photoURL != null &&
+                          _currentUser.photoURL!.isNotEmpty)
+                      ? CircleAvatar(
+                        radius: 32,
+                        backgroundImage: NetworkImage(_currentUser.photoURL!),
+                        backgroundColor: Colors.transparent,
+                      )
+                      : CircleAvatar(
+                        radius: 32,
+                        backgroundColor: MyColors.strongOranje,
+                        child: const Icon(
+                          Icons.person,
+                          color: MyColors.textCards,
+                          size: 40,
+                        ),
+                      ),
               decoration: BoxDecoration(color: MyColors.backgroundCards),
               accountName: Text(
                 _currentUser.displayName ?? "",
@@ -126,9 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (_) => HistoryScreen(),
-                  ),
+                  MaterialPageRoute(builder: (_) => HistoryScreen()),
                 );
               },
             ),
@@ -154,9 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 await Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (_) => const SettingsScreen(),
-                  ),
+                  MaterialPageRoute(builder: (_) => const SettingsScreen()),
                 );
 
                 if (!mounted) return;

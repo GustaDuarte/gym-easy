@@ -320,6 +320,17 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: List.generate(listNotes.length, (index) {
                           NoteModel noteNow = listNotes[index];
+
+                          String formattedDate = "";
+                          try {
+                            final dt = DateTime.parse(noteNow.date);
+                            String two(int n) => n.toString().padLeft(2, '0');
+                            formattedDate =
+                            "${two(dt.day)}/${two(dt.month)}/${dt.year}  ${two(dt.hour)}:${two(dt.minute)}";
+                          } catch (_) {
+                            formattedDate = noteNow.date;
+                          }
+
                           return Padding(
                             padding: const EdgeInsets.symmetric(vertical: 4),
                             child: Row(
@@ -327,8 +338,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                               children: [
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         noteNow.note,
@@ -338,7 +348,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                                         ),
                                       ),
                                       Text(
-                                        noteNow.date,
+                                        formattedDate,
                                         style: const TextStyle(
                                           color: Colors.white70,
                                           fontSize: 12,
